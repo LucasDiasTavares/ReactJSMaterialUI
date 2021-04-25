@@ -1,5 +1,5 @@
 import { Grid } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import SaveIcon from "@material-ui/icons/Save";
 import UndoIcon from "@material-ui/icons/Undo";
 import Controls from "../../components/controls/Controls";
@@ -25,22 +25,58 @@ const initialFieldValues = {
 };
 
 export default function SheetForm() {
-  const { values, handleInputChange } = useForm(initialFieldValues);
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors };
+    if ("fullName" in fieldValues)
+      temp.fullName = fieldValues.fullName ? "" : "This field is required";
+    if ("email" in fieldValues)
+      temp.email = /$^|.+@.+..+/.test(fieldValues.email)
+        ? ""
+        : "Email is not valid";
+    if ("phone" in fieldValues)
+      temp.phone =
+        fieldValues.phone.length > 7 ? "" : "Minimum of 8 numbers required";
+    if ("departmendId" in fieldValues)
+      temp.departmendId =
+        fieldValues.departmendId.length !== 0 ? "" : "This field is required";
+    setErros({
+      ...temp,
+    });
+
+    if (fieldValues === values)
+      return Object.values(temp).every((x) => x === "");
+  };
+
+  const { values, errors, setErros, handleInputChange, resetForm } = useForm(
+    initialFieldValues,
+    true,
+    validate
+  );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      sheetService.insertSheet(values);
+      resetForm();
+    }
+  };
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Grid container>
         <Grid item xs={6}>
           <Controls.Input
-            label="Full Name"
+            label="Full Name *"
             value={values.fullName}
             name="fullName"
+            error={errors.fullName}
             onChange={handleInputChange}
           />
           <Controls.Input
             label="Email"
             value={values.email}
             name="email"
+            error={errors.email}
             onChange={handleInputChange}
           />
           <Controls.Input
@@ -50,9 +86,10 @@ export default function SheetForm() {
             onChange={handleInputChange}
           />
           <Controls.Input
-            label="Phone"
+            label="Phone *"
             value={values.phone}
             name="phone"
+            error={errors.phone}
             onChange={handleInputChange}
           />
         </Grid>
@@ -66,8 +103,9 @@ export default function SheetForm() {
           />
           <Controls.Select
             name="departmendId"
-            label="Department"
+            label="Department *"
             value={values.departmendId}
+            error={errors.departmendId}
             onChange={handleInputChange}
             options={sheetService.getDepartmentCollection()}
           />
@@ -95,6 +133,7 @@ export default function SheetForm() {
               size="large"
               color="default"
               text="Reset"
+              onClick={resetForm}
             />
           </div>
         </Grid>
