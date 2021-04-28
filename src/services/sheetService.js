@@ -40,10 +40,8 @@ export function generateSheetId() {
 export function getAllSheets() {
   if (localStorage.getItem(KEYS.sheets) === null)
     localStorage.setItem(KEYS.sheets, JSON.stringify([]));
-  return JSON.parse(localStorage.getItem(KEYS.sheets));
-  // let departments = getDepartmentCollection();
-  // return sheets.map((x) => ({
-  //   ...x,
-  //   department: departments[x.departmentId - 1].title,
-  // }));
+  let sheets = JSON.parse(localStorage.getItem(KEYS.sheets));
+  return sheets.map((x) => ({
+    ...x,
+  }));
 }
