@@ -12,6 +12,11 @@ import Sheets from "../screens/Sheets/Sheets";
 
 const theme = createMuiTheme({
   palette: {
+    primary: {
+      main: "#1976d2",
+      dark: "#253053",
+      light: "#ffffff",
+    },
     background: {
       default: "#f4f5fd",
     },

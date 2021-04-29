@@ -23,7 +23,7 @@ export default function DatePicker(props) {
         variant="inline"
         inputVariant="outlined"
         label={label}
-        format="dd/MMM/yyyy"
+        format="dd/mm/yyyy"
         name={name}
         value={value}
         invalidDateMessage="Date format invalid"

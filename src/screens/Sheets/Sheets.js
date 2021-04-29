@@ -23,15 +23,20 @@ const headCells = [
   { id: "1", name: "fullName", label: "Sheet owner name" },
   { id: "2", name: "email", label: "Email" },
   { id: "3", name: "city", label: "City" },
-  { id: "4", name: "phone", label: "Phone" },
-  { id: "5", name: "department", label: "Department" },
+  { id: "4", name: "phone", label: "Phone", disableSorting: true },
+  { id: "5", name: "department", label: "Department", disableSorting: true },
 ];
 
 export default function Sheets() {
   const classes = useStyles();
 
   const [records] = useState(sheetService.getAllSheets());
-  const { TableContainer, TableHeader } = useTable(records, headCells);
+  const {
+    TableContainer,
+    TableHeader,
+    TableCustomPagination,
+    recordsAfterPagingAndSorting,
+  } = useTable(records, headCells);
 
   return (
     <>
@@ -47,7 +52,7 @@ export default function Sheets() {
         <TableContainer>
           <TableHeader />
           <TableBody>
-            {records.map((item) => (
+            {recordsAfterPagingAndSorting().map((item) => (
               <TableRow key={item.id}>
                 <TableCell>{item.fullName}</TableCell>
                 <TableCell>{item.email}</TableCell>
@@ -58,6 +63,7 @@ export default function Sheets() {
             ))}
           </TableBody>
         </TableContainer>
+        <TableCustomPagination />
       </Paper>
     </>
   );
