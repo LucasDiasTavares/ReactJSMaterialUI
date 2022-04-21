@@ -10,12 +10,21 @@ import {
   TableRow,
 } from "@material-ui/core";
 import useTable from "../../components/customHooks/useTable";
+import Popup from "../../components/Popup";
+import Button from "../../components/controls/Button";
 import * as sheetService from "../../services/sheetService";
+import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
 
 const useStyles = makeStyles((theme) => ({
   pageContent: {
     margin: theme.spacing(5),
     padding: theme.spacing(3),
+  },
+  newButton: {
+    float: "right",
+    right: "10px",
+    bottom: "5px",
   },
 }));
 
@@ -29,8 +38,14 @@ const headCells = [
 
 export default function Sheets() {
   const classes = useStyles();
+  const [openPopup, setOpenPopup] = useState(false);
 
-  const [records] = useState(sheetService.getAllSheets());
+  const [recordForEdit, setRecordForEdit] = useState(null);
+  const [records, setRecords] = useState(sheetService.getAllSheets());
+
+  console.log(openPopup);
+
+  //const [records] = useState(sheetService.getAllSheets());
   const {
     TableContainer,
     TableHeader,
@@ -49,6 +64,17 @@ export default function Sheets() {
         <SheetForm />
       </Paper>
       <Paper className={classes.pageContent}>
+        <Button
+          text="Adicionar"
+          variant="outlined"
+          startIcon={<AddIcon />}
+          className={classes.newButton}
+          // onClick={() => {
+          //   setOpenModal(true);
+          //   setRecordForEdit(null);
+          // }}
+          onClick={() => setOpenPopup(true)}
+        />
         <TableContainer>
           <TableHeader />
           <TableBody>
@@ -65,6 +91,12 @@ export default function Sheets() {
         </TableContainer>
         <TableCustomPagination />
       </Paper>
+      {/* <SheetForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
+
+      <Popup title="Form" openPopup={openPopup} setOpenPopup={setOpenPopup}>
+        TAVARES
+        {/* <SheetForm recordForEdit={recordForEdit} /> */}
+      </Popup>
     </>
   );
 }

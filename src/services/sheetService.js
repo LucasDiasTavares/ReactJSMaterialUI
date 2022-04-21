@@ -13,6 +13,7 @@ export const getDepartmentCollection = () => [
 export function insertSheet(data) {
   let sheets = getAllSheets();
   data["id"] = sheets.push(data);
+  console.log(data)
   localStorage.setItem(KEYS.sheets, JSON.stringify(sheets));
 }
 
